@@ -14,17 +14,15 @@ func main() {
 	option, param, file := flag.Arg(0), flag.Arg(1), flag.Arg(2)
 
 	// Send logic
-	if (option == "send") {
+	if option == "send" {
 		dest := strings.Split(param, ":")
 		ip, port := dest[0], dest[1]
-		peer := net.Connect(ip, port)
 		fmt.Println("Source IP", net.GetIPv4())
-		net.SendRequest(peer, net.GetIPv4(), net.GetFile(file))
+		net.SendRequest(ip, port, net.GetIPv4(), net.GetFile(file))
 	}
 
 	// Receive logic
-	if (option == "receive") {
-		// Server logic
-		fmt.Println(file)
+	if option == "receive" {
+		net.OpenPort(param)
 	}
 }
