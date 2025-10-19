@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"main/net"
 	"strings"
 )
@@ -17,12 +16,18 @@ func main() {
 	if option == "send" {
 		dest := strings.Split(param, ":")
 		ip, port := dest[0], dest[1]
-		fmt.Println("Source IP", net.GetIPv4())
 		net.SendRequest(ip, port, net.GetIPv4(), net.GetFile(file))
+		switch net.GetAnswer("9300") {
+		case true:
+			net.SendFile(ip, port, net.GetFile(file))
+		case false:
+			return
+		}
 	}
 
 	// Receive logic
 	if option == "receive" {
 		net.OpenPort(param)
+		net.SendAnswer(net.SourceIP, "9300")
 	}
 }

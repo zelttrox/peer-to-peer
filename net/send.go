@@ -16,11 +16,5 @@ func SendRequest(ip string, port string, source string, file File) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer peer.Close()
-	peer.Write([]byte(
-		"Incoming file download received from " + source + "\n" +
-			"File: " + file.Name + " -> " + file.Size + "\n" +
-			"Download this file? (Y/n)",
-	))
-	fmt.Println("File download request sent. Waiting for answer from peer..")
+	peer.Write([]byte(file.Name + "*" + file.Size + "*" + source))
 }
