@@ -17,9 +17,9 @@ func main() {
 		dest := strings.Split(param, ":")
 		ip, port := dest[0], dest[1]
 		net.SendRequest(ip, port, net.GetIPv4(), net.GetFile(file))
-		switch net.GetAnswer("9300") {
+		switch net.GetAnswer("9334") {
 		case true:
-			net.SendFile(ip, port, net.GetFile(file))
+			net.SendFile(ip, "9335", net.GetFile(file).Path)
 		case false:
 			return
 		}
@@ -28,6 +28,7 @@ func main() {
 	// Receive logic
 	if option == "receive" {
 		net.OpenPort(param)
-		net.SendAnswer(net.SourceIP, "9300")
+		net.SendAnswer(net.SourceIP, "9334")
+		net.ReceiveFile("9335", net.FileName)
 	}
 }
