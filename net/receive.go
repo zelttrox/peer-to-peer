@@ -28,7 +28,7 @@ func OpenPort(port string) {
 func PrintRequest(request string) {
 	// file-name * file-size * source
 	req := strings.Split(request, "*")
-	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m\n", req[2])
+	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m (%s) \n", req[3], req[2])
 	fmt.Printf("\x1b[33m%s -> %s\x1b[0m\n", req[0], req[1])
 	FileName = req[0]
 	SourceIP = req[2]

@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"main/config"
 	"main/net"
 	"strings"
 )
@@ -12,14 +14,21 @@ func main() {
 	flag.Parse()
 	option, param, file := flag.Arg(0), flag.Arg(1), flag.Arg(2)
 
+	config.ReadWhitelist("config/whitelist.conf")
+
 	// Send logic
 	if option == "send" {
 		dest := strings.Split(param, ":")
-		ip, port := dest[0], dest[1]
-		net.SendRequest(ip, port, net.GetIPv4(), net.GetFile(file))
+		addr, port, pseudo := dest[0], dest[1], "unknown"
+		if !net.IsIP(addr) && config.PeerExists(addr) {
+			pseudo = addr
+			addr = config.GetIPByNickname(addr)
+		}
+		fmt.Println("Addr:", addr)
+		net.SendRequest(addr, port, net.GetIPv4(), pseudo, net.GetFile(file))
 		switch net.GetAnswer("9334") {
 		case true:
-			net.SendFile(ip, "9335", net.GetFile(file).Path)
+			net.SendFile(addr, "9335", net.GetFile(file).Path)
 		case false:
 			return
 		}
@@ -30,5 +39,18 @@ func main() {
 		net.OpenPort(param)
 		net.SendAnswer(net.SourceIP, "9334")
 		net.ReceiveFile("9335", net.FileName)
+	}
+
+	// Whitelist logic
+	// whitelist add|remove|edit|list 192.168.10.27 nickname
+	if option == "whitelist" {
+		switch param {
+		case "list":
+			config.ReadWhitelist("config/whitelist.conf")
+			fmt.Println(config.Whitelist)
+		case "add":
+			config.AddPeer(config.Peer{Nickname: flag.Arg(2), IP: flag.Arg(3)})
+			fmt.Println(config.Whitelist)
+		}
 	}
 }

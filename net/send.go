@@ -25,10 +25,10 @@ func SendFile(ip string, port string, path string) {
 }
 
 // Send a request to a peer
-func SendRequest(ip string, port string, source string, file File) {
+func SendRequest(ip string, port string, source string, pseudo string, file File) {
 	peer, err := net.Dial("tcp", ip+":"+port)
 	if err != nil {
 		fmt.Println(err)
 	}
-	peer.Write([]byte(file.Name + "*" + file.Size + "*" + source))
+	peer.Write([]byte(file.Name + "*" + file.Size + "*" + source + "*" + pseudo))
 }
