@@ -28,7 +28,7 @@ func main() {
 		net.SendRequest(addr, port, net.GetIPv4(), pseudo, net.GetFile(file))
 		switch net.GetAnswer("9334") {
 		case true:
-			net.SendFile(addr, "9335", net.GetFile(file).Path)
+			net.SendFile(addr, "9339", net.GetFile(file).Path)
 		case false:
 			return
 		}
@@ -38,7 +38,7 @@ func main() {
 	if option == "receive" {
 		net.OpenPort(param)
 		net.SendAnswer(net.SourceIP, "9334")
-		net.ReceiveFile("9335", net.FileName)
+		net.ReceiveFile("9339", net.FileName)
 	}
 
 	// Whitelist logic
@@ -52,5 +52,17 @@ func main() {
 			config.AddPeer(config.Peer{Nickname: flag.Arg(2), IP: flag.Arg(3)})
 			fmt.Println(config.Whitelist)
 		}
+	}
+
+	// Help flag
+	if option == "--help" || option == "-h" || option == "help" {
+		fmt.Println("<-*->")
+		fmt.Println("Send a file :")
+		fmt.Println(" peer send <ip:port> <file>")
+		fmt.Println(" -> peer send 10.41.230.165:9000 \"picture.png\"")
+		fmt.Println("\nReceive a file :")
+		fmt.Println(" peer receive <port>")
+		fmt.Println(" -> peer receive 9000")
+		fmt.Println("<-*->")
 	}
 }

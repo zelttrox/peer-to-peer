@@ -21,6 +21,8 @@ func OpenPort(port string) {
 	if err != nil {
 		fmt.Println("Error", err)
 	}
+	defer conn.Close()
+	defer listener.Close()
 	PrintRequest(string(buffer[:n]))
 }
 
@@ -28,7 +30,7 @@ func OpenPort(port string) {
 func PrintRequest(request string) {
 	// file-name * file-size * source
 	req := strings.Split(request, "*")
-	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m (%s) \n", req[3], req[2])
+	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m (%s) \n", req[2], req[3])
 	fmt.Printf("\x1b[33m%s -> %s\x1b[0m\n", req[0], req[1])
 	FileName = req[0]
 	SourceIP = req[2]
@@ -76,6 +78,7 @@ func GetAnswer(port string) bool {
 		fmt.Println("Unkown answer from peer, cancelling..")
 		return false
 	}
+	defer conn.Close()
 	return false
 }
 
@@ -86,14 +89,15 @@ func ReceiveFile(port string, file string) {
 		fmt.Println("Error:", err)
 	}
 	defer output.Close()
-	listen, err := net.Listen("tcp", ":"+port)
+	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
-	conn, err := listen.Accept()
+	conn, err := listener.Accept()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
 	defer conn.Close()
+	defer listener.Close()
 	io.Copy(output, conn)
 }
