@@ -7,6 +7,9 @@ import (
 	"os"
 )
 
+var Total float64
+var Progress float64
+
 // Send a file to a peer
 func SendFile(ip string, port string, path string) {
 	conn, err := net.Dial("tcp", ip+":"+port)

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 // Returns the local IPv4 address
@@ -26,4 +28,14 @@ func IsIP(expr string) bool {
 	} else {
 		return false
 	}
+}
+
+func ProgressBar(total int, progress int) string {
+	return ""
+}
+
+func Byte(size string) int32 {
+	sizeStr, _ := strings.CutSuffix(size, " Mo")
+	floatSize, _ := strconv.ParseFloat(sizeStr, 64)
+	return int32(floatSize * 1024 * 1024)
 }

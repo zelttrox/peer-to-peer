@@ -27,8 +27,9 @@ func main() {
 			pseudo = addr
 			addr = config.GetIPByNickname(addr)
 		}
+		fmt.Println(net.Byte(net.GetFile(file).Size))
 		net.SendRequest(addr, strconv.Itoa(port), net.GetIPv4(), pseudo, net.GetFile(file))
-		switch net.GetAnswer(strconv.Itoa(port+1)) {
+		switch net.GetAnswer(strconv.Itoa(port + 1)) {
 		case true:
 			time.Sleep(300 * time.Millisecond)
 			net.SendFile(addr, strconv.Itoa(port+2), net.GetFile(file).Path)
@@ -68,5 +69,9 @@ func main() {
 		fmt.Println(" peer receive <port>")
 		fmt.Println(" -> peer receive 9000")
 		fmt.Println("<-*->")
+	}
+
+	if option == "prog" {
+		net.ProgressBar(0, 0)
 	}
 }

@@ -68,7 +68,6 @@ func GetAnswer(port string) bool {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("opened port", port)
 	defer listener.Close()
 	fmt.Println("File transfer request sent - waiting for answer from peer..")
 	conn, _ := listener.Accept()
@@ -101,7 +100,6 @@ func ReceiveFile(port string, file string) {
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
-	fmt.Println("opened port", port)
 	defer listener.Close()
 	
 	conn, err := listener.Accept()
