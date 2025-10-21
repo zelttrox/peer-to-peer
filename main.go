@@ -27,7 +27,7 @@ func main() {
 			pseudo = addr
 			addr = config.GetIPByNickname(addr)
 		}
-		fmt.Println(net.Byte(net.GetFile(file).Size))
+		fmt.Println(net.ByteSize(net.GetFile(file).Size))
 		net.SendRequest(addr, strconv.Itoa(port), net.GetIPv4(), pseudo, net.GetFile(file))
 		switch net.GetAnswer(strconv.Itoa(port + 1)) {
 		case true:

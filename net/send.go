@@ -26,7 +26,25 @@ func SendFile(ip string, port string, path string) {
 	}
 	defer file.Close()
 
-	io.Copy(conn, file)
+	buffer := make([]byte, 32*1024) // 32KB chunks
+	var sent int64
+	total := ByteSize(GetFile(path).Size)
+
+	for {
+		n, err := file.Read(buffer)
+		if n > 0 {
+			written, _ := conn.Write(buffer[:n])
+			sent += int64(written)
+			fmt.Printf("\r%.2f%%", float64(sent)*100/float64(total))
+		}
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			panic(err)
+		}
+	}
+	fmt.Printf("\nFile transfer complete!")
+
 }
 
 // Send a request to a peer

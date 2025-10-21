@@ -18,7 +18,7 @@ func OpenPort(port string) {
 		fmt.Println(err)
 	}
 	defer listener.Close()
-	fmt.Println("Opened port", port, "- waiting for requests from peers..")
+	fmt.Printf("Waiting for requests on \x1b[36m%s\x1b[0m:\x1b[36m%s\x1b[0m\n", GetIPv4(), port)
 	conn, _ := listener.Accept()
 	defer conn.Close()
 	buffer := make([]byte, 1024)
@@ -34,7 +34,7 @@ func PrintRequest(request string) {
 	// file-name * file-size * source
 	req := strings.Split(request, "*")
 	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m (%s) \n", req[2], req[3])
-	fmt.Printf("\x1b[33m%s -> %s\x1b[0m\n", req[0], req[1])
+	fmt.Printf("󱞩 \x1b[94m%s %s \x1b[0m-> \x1b[94m%s\x1b[0m\n", GetIcon(req[0]), req[0], req[1])
 	FileName = req[0]
 	SourceIP = req[2]
 }
