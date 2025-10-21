@@ -13,16 +13,19 @@ var FileName string
 
 // Open a specified port to receive files from peers
 func OpenPort(port string) {
-	listener, _ := net.Listen("tcp", ":"+port)
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer listener.Close()
 	fmt.Println("Opened port", port, "- waiting for requests from peers..")
 	conn, _ := listener.Accept()
+	defer conn.Close()
 	buffer := make([]byte, 1024)
 	n, err := conn.Read(buffer)
 	if err != nil {
 		fmt.Println("Error", err)
 	}
-	defer conn.Close()
-	defer listener.Close()
 	PrintRequest(string(buffer[:n]))
 }
 
@@ -61,7 +64,12 @@ func SendAnswer(source string, port string) {
 
 // Wait for peer answer after sending a file download request
 func GetAnswer(port string) bool {
-	listener, _ := net.Listen("tcp", ":"+port)
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("opened port", port)
+	defer listener.Close()
 	fmt.Println("File transfer request sent - waiting for answer from peer..")
 	conn, _ := listener.Accept()
 	buffer := make([]byte, 1024)
@@ -93,11 +101,13 @@ func ReceiveFile(port string, file string) {
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
+	fmt.Println("opened port", port)
+	defer listener.Close()
+	
 	conn, err := listener.Accept()
 	if err != nil {
 		fmt.Println("Error:", err)
 	}
 	defer conn.Close()
-	defer listener.Close()
 	io.Copy(output, conn)
 }

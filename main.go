@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"main/config"
 	"main/net"
+	"strconv"
 	"strings"
 )
 
@@ -19,16 +20,17 @@ func main() {
 	// Send logic
 	if option == "send" {
 		dest := strings.Split(param, ":")
-		addr, port, pseudo := dest[0], dest[1], "unknown"
+		addr, pseudo := dest[0], "unknown"
+		port, _ := strconv.Atoi(dest[1])
 		if !net.IsIP(addr) && config.PeerExists(addr) {
 			pseudo = addr
 			addr = config.GetIPByNickname(addr)
 		}
 		fmt.Println("Addr:", addr)
-		net.SendRequest(addr, port, net.GetIPv4(), pseudo, net.GetFile(file))
-		switch net.GetAnswer("9334") {
+		net.SendRequest(addr, strconv.Itoa(port), net.GetIPv4(), pseudo, net.GetFile(file))
+		switch net.GetAnswer(strconv.Itoa(port+1)) {
 		case true:
-			net.SendFile(addr, "9339", net.GetFile(file).Path)
+			net.SendFile(addr, strconv.Itoa(port+2), net.GetFile(file).Path)
 		case false:
 			return
 		}
@@ -36,9 +38,10 @@ func main() {
 
 	// Receive logic
 	if option == "receive" {
+		port, _ := strconv.Atoi(param)
 		net.OpenPort(param)
-		net.SendAnswer(net.SourceIP, "9334")
-		net.ReceiveFile("9339", net.FileName)
+		net.SendAnswer(net.SourceIP, strconv.Itoa(port+1))
+		net.ReceiveFile(strconv.Itoa(port+2), net.FileName)
 	}
 
 	// Whitelist logic
