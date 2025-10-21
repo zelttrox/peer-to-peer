@@ -12,12 +12,14 @@ func SendFile(ip string, port string, path string) {
 	conn, err := net.Dial("tcp", ip+":"+port)
 	if err != nil {
 		fmt.Println("Error:", err)
+		return
 	}
 	defer conn.Close()
 
 	file, err := os.Open(path)
 	if err != nil {
 		fmt.Println("Error:", err)
+		return
 	}
 	defer file.Close()
 
@@ -29,6 +31,9 @@ func SendRequest(ip string, port string, source string, pseudo string, file File
 	peer, err := net.Dial("tcp", ip+":"+port)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
+	defer peer.Close()
+
 	peer.Write([]byte(file.Name + "*" + file.Size + "*" + source + "*" + pseudo))
 }
