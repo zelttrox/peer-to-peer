@@ -26,13 +26,18 @@ func OpenPort(port string) {
 	if err != nil {
 		fmt.Println("Error", err)
 	}
-	PrintRequest(string(buffer[:n]))
+	request := strings.Split(string(buffer[:n]), "*")
+	if PeerBlocked(request[2]) {
+		return
+	} else {
+		PrintRequest(request)
+	}
+	
 }
 
 // Print the request in the terminal
-func PrintRequest(request string) {
+func PrintRequest(req []string) {
 	// file-name * file-size * source
-	req := strings.Split(request, "*")
 	fmt.Printf("Incoming file request from \x1b[36m%s\x1b[0m (%s) \n", req[2], req[3])
 	fmt.Printf("󱞩 \x1b[94m%s %s \x1b[0m-> \x1b[94m%s\x1b[0m\n", GetIcon(req[0]), req[0], req[1])
 	FileName = req[0]
@@ -63,26 +68,26 @@ func SendAnswer(source string, port string) {
 }
 
 // Wait for peer answer after sending a file download request
-func GetAnswer(port string) bool {
+func GetAnswer(port string, destIP string, destPort string) bool {
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer listener.Close()
-	fmt.Println("File transfer request sent - waiting for answer from peer..")
+	fmt.Printf("File request sent to \x1b[36m%s\x1b[0m:\x1b[36m%s\x1b[0m.\n", destIP, destPort)
+	fmt.Println("Waiting for answer from peer..")
 	conn, _ := listener.Accept()
 	buffer := make([]byte, 1024)
 	n, err := conn.Read(buffer)
 	if err != nil {
 		fmt.Println("Error:", err)
 	} else if string(buffer[:n]) == "y" {
-		fmt.Println("File transfer accepted by peer, proceeding..")
 		return true
 	} else if string(buffer[:n]) == "n" {
-		fmt.Println("File transfer denied by peer, cancelling..")
+		fmt.Println("\x1b[31mFile transfer denied by peer.\x1b[0m")
 		return false
 	} else {
-		fmt.Println("Unkown answer from peer, cancelling..")
+		fmt.Println("\x1b[31mUnexpected answer '", string(buffer[:n]), "' from peer\x1b[0m")
 		return false
 	}
 	defer conn.Close()

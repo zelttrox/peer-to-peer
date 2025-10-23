@@ -30,10 +30,6 @@ func IsIP(expr string) bool {
 	}
 }
 
-func ProgressBar(total int, progress int) string {
-	return ""
-}
-
 func ByteSize(size string) int32 {
 	sizeStr, _ := strings.CutSuffix(size, " Mo")
 	floatSize, _ := strconv.ParseFloat(sizeStr, 64)

@@ -43,7 +43,8 @@ func SendFile(ip string, port string, path string) {
 			panic(err)
 		}
 	}
-	fmt.Printf("\nFile transfer complete!")
+	fmt.Printf("\r")
+	fmt.Println("\x1b[32mFile transfer complete!\x1b[0m")
 
 }
 
