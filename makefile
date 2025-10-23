@@ -1,3 +1,9 @@
 i: 
-	go build -o peer .
-	./peer help
+	cd bin && ./install.sh
+
+u:
+	cd bin && ./uninstall.sh
+
+r:
+	cd bin && ./uninstall.sh
+	cd bin && ./install.sh
