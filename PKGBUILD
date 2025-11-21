@@ -12,13 +12,13 @@ sha256sums=('SKIP')
 
 build() {
     cd "$srcdir/peer-to-peer-Release"
-    go build -o peer ./cmd/peer
+    go build -o peer .
+    rm -rf ~/.config/peer
     mkdir ~/.config/peer
     cp -r config/. ~/.config/peer/
 }
 
 package() {
-    cd "$srcdir/$pkgname-$pkgver"
+    cd "$srcdir/peer-to-peer-Release"
     install -Dm755 peer "$pkgdir/usr/bin/peer"
-    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
