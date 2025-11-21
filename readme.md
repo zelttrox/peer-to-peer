@@ -1,7 +1,7 @@
 # Description #
 This is a **file transfer program** that uses direct connection from a machine to another with TCP network protocol. It can be ran using a terminal on Linux. It may also work on Windows or Mac but **has not been tested yet, use at your own risks!** <br>
 
-**The sending and receiving machines must connected to the same network for the file transfer to work.** <br>
+**The sending and receiving machines must be connected to the same network for the file transfer to work.** <br>
 
 **Note that network protection like proxy rules might sometimes block file transfers even thought both machines are connected to the same network.**
 
