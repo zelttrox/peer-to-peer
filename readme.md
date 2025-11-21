@@ -6,6 +6,11 @@ This is a **file transfer program** that uses direct connection from a machine t
 **Note that network protection like proxy rules might sometimes block file transfers even thought both machines are connected to the same network.**
 
 # Installation #
+Using AUR
+```sh
+yay -S peer-to-peer
+```
+Using Git
 ```sh
 git clone https://github.com/zelttrox/peer-to-peer.git
 cd peer-to-peer/bin && chmod +x install.sh && ./install.sh
